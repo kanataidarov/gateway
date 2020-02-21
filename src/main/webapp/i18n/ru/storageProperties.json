@@ -1,0 +1,31 @@
+{
+  "gatewayApp": {
+    "storageProperties": {
+      "home": {
+        "title": "Properties",
+        "createLabel": "Создать новый Properties",
+        "createOrEditLabel": "Создать или отредактировать Properties",
+        "search": "Найти Properties",
+        "notFound": "No Properties found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Properties {{ id }}?"
+      },
+      "detail": {
+        "title": "Properties"
+      },
+      "name": "Name",
+      "value": "Value",
+      "created": "Created",
+      "updated": "Updated",
+      "group_id": "Group Id"
+    }
+  },
+  "storageApp": {
+    "storageProperties": {
+      "created": "Новый Properties создан с идентификатором {{ param }}",
+      "updated": "Properties обновлен с идентификатором {{ param }}",
+      "deleted": "Properties удален с идентификатором {{ param }}"
+    }
+  }
+}

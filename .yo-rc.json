@@ -2,9 +2,10 @@
   "generator-jhipster": {
     "promptValues": {
       "packageName": "kz.kaznu.nmm.aglomer",
-      "nativeLanguage": "ru"
+      "nativeLanguage": "ru",
+      "microservicePath": "../storage"
     },
-    "jhipsterVersion": "6.6.0",
+    "jhipsterVersion": "6.7.1",
     "applicationType": "gateway",
     "baseName": "gateway",
     "packageName": "kz.kaznu.nmm.aglomer",
@@ -29,7 +30,7 @@
     "clientFramework": "react",
     "clientTheme": "materia",
     "clientThemeVariant": "light",
-    "creationTimestamp": 1582265218279,
+    "creationTimestamp": 1582279748005,
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",

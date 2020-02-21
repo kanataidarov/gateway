@@ -67,7 +67,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-	@Qualifier("loadBalancedRestTemplate")
+    @Qualifier("loadBalancedRestTemplate")
     public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
