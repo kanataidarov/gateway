@@ -20,6 +20,26 @@ import propertyGroup, {
 import property, {
   PropertyState
 } from 'app/entities/storage/property/property.reducer';
+// prettier-ignore
+import recordGroup, {
+  RecordGroupState
+} from 'app/entities/storage/record-group/record-group.reducer';
+// prettier-ignore
+import recordTemplate, {
+  RecordTemplateState
+} from 'app/entities/storage/record-template/record-template.reducer';
+// prettier-ignore
+import recordField, {
+  RecordFieldState
+} from 'app/entities/storage/record-field/record-field.reducer';
+// prettier-ignore
+import record, {
+  RecordState
+} from 'app/entities/storage/record/record.reducer';
+// prettier-ignore
+import recordValue, {
+  RecordValueState
+} from 'app/entities/storage/record-value/record-value.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -35,6 +55,11 @@ export interface IRootState {
   readonly settings: SettingsState;
   readonly propertyGroup: PropertyGroupState;
   readonly property: PropertyState;
+  readonly recordGroup: RecordGroupState;
+  readonly recordTemplate: RecordTemplateState;
+  readonly recordField: RecordFieldState;
+  readonly record: RecordState;
+  readonly recordValue: RecordValueState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -52,6 +77,11 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   propertyGroup,
   property,
+  recordGroup,
+  recordTemplate,
+  recordField,
+  record,
+  recordValue,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });
