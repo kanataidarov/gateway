@@ -1,0 +1,32 @@
+{
+  "gatewayApp": {
+    "storageRecordTemplate": {
+      "home": {
+        "title": "Record Templates",
+        "createLabel": "Создать новый Record Template",
+        "createOrEditLabel": "Создать или отредактировать Record Template",
+        "search": "Найти Record Template",
+        "notFound": "No Record Templates found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Record Template {{ id }}?"
+      },
+      "detail": {
+        "title": "Record Template"
+      },
+      "name": "Name",
+      "created": "Created",
+      "updated": "Updated",
+      "language": "Language",
+      "recordTemplateRecordField": "Record Template Record Field",
+      "group": "Group"
+    }
+  },
+  "storageApp": {
+    "storageRecordTemplate": {
+      "created": "Новый Record Template создан с идентификатором {{ param }}",
+      "updated": "Record Template обновлен с идентификатором {{ param }}",
+      "deleted": "Record Template удален с идентификатором {{ param }}"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "gatewayApp": {
+    "storageRecordGroup": {
+      "home": {
+        "title": "Record Groups",
+        "createLabel": "Создать новый Record Group",
+        "createOrEditLabel": "Создать или отредактировать Record Group",
+        "search": "Найти Record Group",
+        "notFound": "No Record Groups found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Record Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Record Group"
+      },
+      "name": "Name",
+      "type": "Type",
+      "recordGroupRecordTemplate": "Record Group Record Template"
+    }
+  },
+  "storageApp": {
+    "storageRecordGroup": {
+      "created": "Новый Record Group создан с идентификатором {{ param }}",
+      "updated": "Record Group обновлен с идентификатором {{ param }}",
+      "deleted": "Record Group удален с идентификатором {{ param }}"
+    }
+  }
+}

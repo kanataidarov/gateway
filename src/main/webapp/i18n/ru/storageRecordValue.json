@@ -1,0 +1,31 @@
+{
+  "gatewayApp": {
+    "storageRecordValue": {
+      "home": {
+        "title": "Record Values",
+        "createLabel": "Создать новый Record Value",
+        "createOrEditLabel": "Создать или отредактировать Record Value",
+        "search": "Найти Record Value",
+        "notFound": "No Record Values found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Record Value {{ id }}?"
+      },
+      "detail": {
+        "title": "Record Value"
+      },
+      "value": "Value",
+      "created": "Created",
+      "updated": "Updated",
+      "record": "Record",
+      "field": "Field"
+    }
+  },
+  "storageApp": {
+    "storageRecordValue": {
+      "created": "Новый Record Value создан с идентификатором {{ param }}",
+      "updated": "Record Value обновлен с идентификатором {{ param }}",
+      "deleted": "Record Value удален с идентификатором {{ param }}"
+    }
+  }
+}
