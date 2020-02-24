@@ -7,20 +7,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './properties.reducer';
-import { IProperties } from 'app/shared/model/storage/properties.model';
+import { getEntity, updateEntity, createEntity, reset } from './property.reducer';
+import { IProperty } from 'app/shared/model/storage/property.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
-export interface IPropertiesUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IPropertyUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export const PropertiesUpdate = (props: IPropertiesUpdateProps) => {
+export const PropertyUpdate = (props: IPropertyUpdateProps) => {
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { propertiesEntity, loading, updating } = props;
+  const { propertyEntity, loading, updating } = props;
 
   const handleClose = () => {
-    props.history.push('/properties');
+    props.history.push('/property');
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const PropertiesUpdate = (props: IPropertiesUpdateProps) => {
 
     if (errors.length === 0) {
       const entity = {
-        ...propertiesEntity,
+        ...propertyEntity,
         ...values
       };
 
@@ -59,8 +59,8 @@ export const PropertiesUpdate = (props: IPropertiesUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="gatewayApp.storageProperties.home.createOrEditLabel">
-            <Translate contentKey="gatewayApp.storageProperties.home.createOrEditLabel">Create or edit a Properties</Translate>
+          <h2 id="gatewayApp.storageProperty.home.createOrEditLabel">
+            <Translate contentKey="gatewayApp.storageProperty.home.createOrEditLabel">Create or edit a Property</Translate>
           </h2>
         </Col>
       </Row>
@@ -69,80 +69,68 @@ export const PropertiesUpdate = (props: IPropertiesUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : propertiesEntity} onSubmit={saveEntity}>
+            <AvForm model={isNew ? {} : propertyEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="properties-id">
+                  <Label for="property-id">
                     <Translate contentKey="global.field.id">ID</Translate>
                   </Label>
-                  <AvInput id="properties-id" type="text" className="form-control" name="id" required readOnly />
+                  <AvInput id="property-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
-                <Label id="nameLabel" for="properties-name">
-                  <Translate contentKey="gatewayApp.storageProperties.name">Name</Translate>
+                <Label id="nameLabel" for="property-name">
+                  <Translate contentKey="gatewayApp.storageProperty.name">Name</Translate>
                 </Label>
                 <AvField
-                  id="properties-name"
+                  id="property-name"
                   type="text"
                   name="name"
                   validate={{
-                    required: { value: true, errorMessage: translate('entity.validation.required') }
+                    required: { value: true, errorMessage: translate('entity.validation.required') },
+                    maxLength: { value: 99, errorMessage: translate('entity.validation.maxlength', { max: 99 }) }
                   }}
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="valueLabel" for="properties-value">
-                  <Translate contentKey="gatewayApp.storageProperties.value">Value</Translate>
-                </Label>
-                <AvField
-                  id="properties-value"
-                  type="text"
-                  name="value"
-                  validate={{
-                    required: { value: true, errorMessage: translate('entity.validation.required') }
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label id="createdLabel" for="properties-created">
-                  <Translate contentKey="gatewayApp.storageProperties.created">Created</Translate>
+                <Label id="createdLabel" for="property-created">
+                  <Translate contentKey="gatewayApp.storageProperty.created">Created</Translate>
                 </Label>
                 <AvInput
-                  id="properties-created"
+                  id="property-created"
                   type="datetime-local"
                   className="form-control"
                   name="created"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.propertiesEntity.created)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.propertyEntity.created)}
                   validate={{
                     required: { value: true, errorMessage: translate('entity.validation.required') }
                   }}
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="updatedLabel" for="properties-updated">
-                  <Translate contentKey="gatewayApp.storageProperties.updated">Updated</Translate>
+                <Label id="updatedLabel" for="property-updated">
+                  <Translate contentKey="gatewayApp.storageProperty.updated">Updated</Translate>
                 </Label>
                 <AvInput
-                  id="properties-updated"
+                  id="property-updated"
                   type="datetime-local"
                   className="form-control"
                   name="updated"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.propertiesEntity.updated)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.propertyEntity.updated)}
                   validate={{
                     required: { value: true, errorMessage: translate('entity.validation.required') }
                   }}
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="group_idLabel" for="properties-group_id">
-                  <Translate contentKey="gatewayApp.storageProperties.group_id">Group Id</Translate>
+                <Label id="groupLabel" for="property-group">
+                  <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
                 </Label>
-                <AvField id="properties-group_id" type="text" name="group_id" />
+                <AvField id="property-group" type="string" className="form-control" name="group" />
               </AvGroup>
-              <Button tag={Link} id="cancel-save" to="/properties" replace color="info">
+              <Button tag={Link} id="cancel-save" to="/property" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -164,10 +152,10 @@ export const PropertiesUpdate = (props: IPropertiesUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  propertiesEntity: storeState.properties.entity,
-  loading: storeState.properties.loading,
-  updating: storeState.properties.updating,
-  updateSuccess: storeState.properties.updateSuccess
+  propertyEntity: storeState.property.entity,
+  loading: storeState.property.loading,
+  updating: storeState.property.updating,
+  updateSuccess: storeState.property.updateSuccess
 });
 
 const mapDispatchToProps = {
@@ -180,4 +168,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropertiesUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(PropertyUpdate);

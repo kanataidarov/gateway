@@ -1,0 +1,27 @@
+{
+  "gatewayApp": {
+    "storagePropertyGroup": {
+      "home": {
+        "title": "Property Groups",
+        "createLabel": "Создать новый Property Group",
+        "createOrEditLabel": "Создать или отредактировать Property Group",
+        "search": "Найти Property Group",
+        "notFound": "No Property Groups found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Property Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Property Group"
+      },
+      "name": "Name"
+    }
+  },
+  "storageApp": {
+    "storagePropertyGroup": {
+      "created": "Новый Property Group создан с идентификатором {{ param }}",
+      "updated": "Property Group обновлен с идентификатором {{ param }}",
+      "deleted": "Property Group удален с идентификатором {{ param }}"
+    }
+  }
+}

@@ -7,13 +7,13 @@ import { Translate, translate, ICrudSearchAction, ICrudGetAllAction, TextFormat 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getSearchEntities, getEntities } from './properties.reducer';
-import { IProperties } from 'app/shared/model/storage/properties.model';
+import { getSearchEntities, getEntities } from './property.reducer';
+import { IProperty } from 'app/shared/model/storage/property.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
-export interface IPropertiesProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IPropertyProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export const Properties = (props: IPropertiesProps) => {
+export const Property = (props: IPropertyProps) => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -32,15 +32,15 @@ export const Properties = (props: IPropertiesProps) => {
 
   const handleSearch = event => setSearch(event.target.value);
 
-  const { propertiesList, match, loading } = props;
+  const { propertyList, match, loading } = props;
   return (
     <div>
-      <h2 id="properties-heading">
-        <Translate contentKey="gatewayApp.storageProperties.home.title">Properties</Translate>
+      <h2 id="property-heading">
+        <Translate contentKey="gatewayApp.storageProperty.home.title">Properties</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
           &nbsp;
-          <Translate contentKey="gatewayApp.storageProperties.home.createLabel">Create new Properties</Translate>
+          <Translate contentKey="gatewayApp.storageProperty.home.createLabel">Create new Property</Translate>
         </Link>
       </h2>
       <Row>
@@ -53,7 +53,7 @@ export const Properties = (props: IPropertiesProps) => {
                   name="search"
                   value={search}
                   onChange={handleSearch}
-                  placeholder={translate('gatewayApp.storageProperties.home.search')}
+                  placeholder={translate('gatewayApp.storageProperty.home.search')}
                 />
                 <Button className="input-group-addon">
                   <FontAwesomeIcon icon="search" />
@@ -67,7 +67,7 @@ export const Properties = (props: IPropertiesProps) => {
         </Col>
       </Row>
       <div className="table-responsive">
-        {propertiesList && propertiesList.length > 0 ? (
+        {propertyList && propertyList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
@@ -75,55 +75,51 @@ export const Properties = (props: IPropertiesProps) => {
                   <Translate contentKey="global.field.id">ID</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="gatewayApp.storageProperties.name">Name</Translate>
+                  <Translate contentKey="gatewayApp.storageProperty.name">Name</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="gatewayApp.storageProperties.value">Value</Translate>
+                  <Translate contentKey="gatewayApp.storageProperty.created">Created</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="gatewayApp.storageProperties.created">Created</Translate>
+                  <Translate contentKey="gatewayApp.storageProperty.updated">Updated</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="gatewayApp.storageProperties.updated">Updated</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="gatewayApp.storageProperties.group_id">Group Id</Translate>
+                  <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {propertiesList.map((properties, i) => (
+              {propertyList.map((property, i) => (
                 <tr key={`entity-${i}`}>
                   <td>
-                    <Button tag={Link} to={`${match.url}/${properties.id}`} color="link" size="sm">
-                      {properties.id}
+                    <Button tag={Link} to={`${match.url}/${property.id}`} color="link" size="sm">
+                      {property.id}
                     </Button>
                   </td>
-                  <td>{properties.name}</td>
-                  <td>{properties.value}</td>
+                  <td>{property.name}</td>
                   <td>
-                    <TextFormat type="date" value={properties.created} format={APP_DATE_FORMAT} />
+                    <TextFormat type="date" value={property.created} format={APP_DATE_FORMAT} />
                   </td>
                   <td>
-                    <TextFormat type="date" value={properties.updated} format={APP_DATE_FORMAT} />
+                    <TextFormat type="date" value={property.updated} format={APP_DATE_FORMAT} />
                   </td>
-                  <td>{properties.group_id}</td>
+                  <td>{property.group}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${properties.id}`} color="info" size="sm">
+                      <Button tag={Link} to={`${match.url}/${property.id}`} color="info" size="sm">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${properties.id}/edit`} color="primary" size="sm">
+                      <Button tag={Link} to={`${match.url}/${property.id}/edit`} color="primary" size="sm">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${properties.id}/delete`} color="danger" size="sm">
+                      <Button tag={Link} to={`${match.url}/${property.id}/delete`} color="danger" size="sm">
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -138,7 +134,7 @@ export const Properties = (props: IPropertiesProps) => {
         ) : (
           !loading && (
             <div className="alert alert-warning">
-              <Translate contentKey="gatewayApp.storageProperties.home.notFound">No Properties found</Translate>
+              <Translate contentKey="gatewayApp.storageProperty.home.notFound">No Properties found</Translate>
             </div>
           )
         )}
@@ -147,9 +143,9 @@ export const Properties = (props: IPropertiesProps) => {
   );
 };
 
-const mapStateToProps = ({ properties }: IRootState) => ({
-  propertiesList: properties.entities,
-  loading: properties.loading
+const mapStateToProps = ({ property }: IRootState) => ({
+  propertyList: property.entities,
+  loading: property.loading
 });
 
 const mapDispatchToProps = {
@@ -160,4 +156,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Properties);
+export default connect(mapStateToProps, mapDispatchToProps)(Property);

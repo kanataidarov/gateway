@@ -4,45 +4,45 @@ import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, I
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import { IProperties, defaultValue } from 'app/shared/model/storage/properties.model';
+import { IProperty, defaultValue } from 'app/shared/model/storage/property.model';
 
 export const ACTION_TYPES = {
-  SEARCH_PROPERTIES: 'properties/SEARCH_PROPERTIES',
-  FETCH_PROPERTIES_LIST: 'properties/FETCH_PROPERTIES_LIST',
-  FETCH_PROPERTIES: 'properties/FETCH_PROPERTIES',
-  CREATE_PROPERTIES: 'properties/CREATE_PROPERTIES',
-  UPDATE_PROPERTIES: 'properties/UPDATE_PROPERTIES',
-  DELETE_PROPERTIES: 'properties/DELETE_PROPERTIES',
-  RESET: 'properties/RESET'
+  SEARCH_PROPERTIES: 'property/SEARCH_PROPERTIES',
+  FETCH_PROPERTY_LIST: 'property/FETCH_PROPERTY_LIST',
+  FETCH_PROPERTY: 'property/FETCH_PROPERTY',
+  CREATE_PROPERTY: 'property/CREATE_PROPERTY',
+  UPDATE_PROPERTY: 'property/UPDATE_PROPERTY',
+  DELETE_PROPERTY: 'property/DELETE_PROPERTY',
+  RESET: 'property/RESET'
 };
 
 const initialState = {
   loading: false,
   errorMessage: null,
-  entities: [] as ReadonlyArray<IProperties>,
+  entities: [] as ReadonlyArray<IProperty>,
   entity: defaultValue,
   updating: false,
   updateSuccess: false
 };
 
-export type PropertiesState = Readonly<typeof initialState>;
+export type PropertyState = Readonly<typeof initialState>;
 
 // Reducer
 
-export default (state: PropertiesState = initialState, action): PropertiesState => {
+export default (state: PropertyState = initialState, action): PropertyState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.SEARCH_PROPERTIES):
-    case REQUEST(ACTION_TYPES.FETCH_PROPERTIES_LIST):
-    case REQUEST(ACTION_TYPES.FETCH_PROPERTIES):
+    case REQUEST(ACTION_TYPES.FETCH_PROPERTY_LIST):
+    case REQUEST(ACTION_TYPES.FETCH_PROPERTY):
       return {
         ...state,
         errorMessage: null,
         updateSuccess: false,
         loading: true
       };
-    case REQUEST(ACTION_TYPES.CREATE_PROPERTIES):
-    case REQUEST(ACTION_TYPES.UPDATE_PROPERTIES):
-    case REQUEST(ACTION_TYPES.DELETE_PROPERTIES):
+    case REQUEST(ACTION_TYPES.CREATE_PROPERTY):
+    case REQUEST(ACTION_TYPES.UPDATE_PROPERTY):
+    case REQUEST(ACTION_TYPES.DELETE_PROPERTY):
       return {
         ...state,
         errorMessage: null,
@@ -50,11 +50,11 @@ export default (state: PropertiesState = initialState, action): PropertiesState 
         updating: true
       };
     case FAILURE(ACTION_TYPES.SEARCH_PROPERTIES):
-    case FAILURE(ACTION_TYPES.FETCH_PROPERTIES_LIST):
-    case FAILURE(ACTION_TYPES.FETCH_PROPERTIES):
-    case FAILURE(ACTION_TYPES.CREATE_PROPERTIES):
-    case FAILURE(ACTION_TYPES.UPDATE_PROPERTIES):
-    case FAILURE(ACTION_TYPES.DELETE_PROPERTIES):
+    case FAILURE(ACTION_TYPES.FETCH_PROPERTY_LIST):
+    case FAILURE(ACTION_TYPES.FETCH_PROPERTY):
+    case FAILURE(ACTION_TYPES.CREATE_PROPERTY):
+    case FAILURE(ACTION_TYPES.UPDATE_PROPERTY):
+    case FAILURE(ACTION_TYPES.DELETE_PROPERTY):
       return {
         ...state,
         loading: false,
@@ -63,27 +63,27 @@ export default (state: PropertiesState = initialState, action): PropertiesState 
         errorMessage: action.payload
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PROPERTIES):
-    case SUCCESS(ACTION_TYPES.FETCH_PROPERTIES_LIST):
+    case SUCCESS(ACTION_TYPES.FETCH_PROPERTY_LIST):
       return {
         ...state,
         loading: false,
         entities: action.payload.data
       };
-    case SUCCESS(ACTION_TYPES.FETCH_PROPERTIES):
+    case SUCCESS(ACTION_TYPES.FETCH_PROPERTY):
       return {
         ...state,
         loading: false,
         entity: action.payload.data
       };
-    case SUCCESS(ACTION_TYPES.CREATE_PROPERTIES):
-    case SUCCESS(ACTION_TYPES.UPDATE_PROPERTIES):
+    case SUCCESS(ACTION_TYPES.CREATE_PROPERTY):
+    case SUCCESS(ACTION_TYPES.UPDATE_PROPERTY):
       return {
         ...state,
         updating: false,
         updateSuccess: true,
         entity: action.payload.data
       };
-    case SUCCESS(ACTION_TYPES.DELETE_PROPERTIES):
+    case SUCCESS(ACTION_TYPES.DELETE_PROPERTY):
       return {
         ...state,
         updating: false,
@@ -104,46 +104,46 @@ const apiSearchUrl = 'services/storage/api/_search/properties';
 
 // Actions
 
-export const getSearchEntities: ICrudSearchAction<IProperties> = (query, page, size, sort) => ({
+export const getSearchEntities: ICrudSearchAction<IProperty> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_PROPERTIES,
-  payload: axios.get<IProperties>(`${apiSearchUrl}?query=${query}`)
+  payload: axios.get<IProperty>(`${apiSearchUrl}?query=${query}`)
 });
 
-export const getEntities: ICrudGetAllAction<IProperties> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_PROPERTIES_LIST,
-  payload: axios.get<IProperties>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
+export const getEntities: ICrudGetAllAction<IProperty> = (page, size, sort) => ({
+  type: ACTION_TYPES.FETCH_PROPERTY_LIST,
+  payload: axios.get<IProperty>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 
-export const getEntity: ICrudGetAction<IProperties> = id => {
+export const getEntity: ICrudGetAction<IProperty> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
-    type: ACTION_TYPES.FETCH_PROPERTIES,
-    payload: axios.get<IProperties>(requestUrl)
+    type: ACTION_TYPES.FETCH_PROPERTY,
+    payload: axios.get<IProperty>(requestUrl)
   };
 };
 
-export const createEntity: ICrudPutAction<IProperties> = entity => async dispatch => {
+export const createEntity: ICrudPutAction<IProperty> = entity => async dispatch => {
   const result = await dispatch({
-    type: ACTION_TYPES.CREATE_PROPERTIES,
+    type: ACTION_TYPES.CREATE_PROPERTY,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
 };
 
-export const updateEntity: ICrudPutAction<IProperties> = entity => async dispatch => {
+export const updateEntity: ICrudPutAction<IProperty> = entity => async dispatch => {
   const result = await dispatch({
-    type: ACTION_TYPES.UPDATE_PROPERTIES,
+    type: ACTION_TYPES.UPDATE_PROPERTY,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
 };
 
-export const deleteEntity: ICrudDeleteAction<IProperties> = id => async dispatch => {
+export const deleteEntity: ICrudDeleteAction<IProperty> = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
-    type: ACTION_TYPES.DELETE_PROPERTIES,
+    type: ACTION_TYPES.DELETE_PROPERTY,
     payload: axios.delete(requestUrl)
   });
   dispatch(getEntities());
