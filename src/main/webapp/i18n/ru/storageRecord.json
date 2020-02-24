@@ -1,0 +1,30 @@
+{
+  "gatewayApp": {
+    "storageRecord": {
+      "home": {
+        "title": "Records",
+        "createLabel": "Создать новый Record",
+        "createOrEditLabel": "Создать или отредактировать Record",
+        "search": "Найти Record",
+        "notFound": "No Records found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Record"
+      },
+      "code": "Code",
+      "created": "Created",
+      "updated": "Updated",
+      "recordRecordValue": "Record Record Value"
+    }
+  },
+  "storageApp": {
+    "storageRecord": {
+      "created": "Новый Record создан с идентификатором {{ param }}",
+      "updated": "Record обновлен с идентификатором {{ param }}",
+      "deleted": "Record удален с идентификатором {{ param }}"
+    }
+  }
+}
