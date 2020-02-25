@@ -24,9 +24,7 @@ export const PropertyGroupUpdate = (props: IPropertyGroupUpdateProps) => {
   };
 
   useEffect(() => {
-    if (isNew) {
-      props.reset();
-    } else {
+    if (!isNew) {
       props.getEntity(props.match.params.id);
     }
   }, []);
