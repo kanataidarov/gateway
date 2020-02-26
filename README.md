@@ -2,6 +2,8 @@
 
 This is a Gateway Service - application intended to be part of a microservice architecture.
 
+Part of [Aglomer](https://github.com/users/kanataidarov/projects/1) project.
+
 The application has following features:
 
 - It uses [Zuul]() to access backend microservices.
