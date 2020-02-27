@@ -17,7 +17,7 @@ export const PropertyDeleteDialog = (props: IPropertyDeleteDialogProps) => {
   }, []);
 
   const handleClose = () => {
-    props.history.push('/property');
+    props.history.push('/property' + props.location.search);
   };
 
   useEffect(() => {

@@ -1,0 +1,30 @@
+{
+  "gatewayApp": {
+    "storageRecordField": {
+      "home": {
+        "title": "Record Fields",
+        "createLabel": "Создать новый Record Field",
+        "createOrEditLabel": "Создать или отредактировать Record Field",
+        "search": "Найти Record Field",
+        "notFound": "No Record Fields found"
+      },
+      "delete": {
+        "question": "Вы уверены что хотите удалить Record Field {{ id }}?"
+      },
+      "detail": {
+        "title": "Record Field"
+      },
+      "name": "Name",
+      "description": "Description",
+      "recordFieldRecordValue": "Record Field Record Value",
+      "template": "Template"
+    }
+  },
+  "storageApp": {
+    "storageRecordField": {
+      "created": "Новый Record Field создан с идентификатором {{ param }}",
+      "updated": "Record Field обновлен с идентификатором {{ param }}",
+      "deleted": "Record Field удален с идентификатором {{ param }}"
+    }
+  }
+}

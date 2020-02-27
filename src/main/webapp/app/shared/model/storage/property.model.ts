@@ -5,7 +5,7 @@ export interface IProperty {
   name?: string;
   created?: Moment;
   updated?: Moment;
-  group?: number;
+  groupId?: number;
 }
 
 export const defaultValue: Readonly<IProperty> = {};

@@ -7,3 +7,4 @@
   ${AnsiColor.RED}╚═╝  ╚═╝${AnsiColor.GREEN}╚═╝  ╚═╝╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═══╝
 
 ${AnsiColor.YELLOW}:: Salem! 🇰🇿 :: Running Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}
+

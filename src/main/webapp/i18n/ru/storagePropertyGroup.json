@@ -14,7 +14,8 @@
       "detail": {
         "title": "Property Group"
       },
-      "name": "Name"
+      "name": "Name",
+      "propertyGroupProperty": "Property Group Property"
     }
   },
   "storageApp": {

@@ -9,6 +9,11 @@
         "main": "Сущности",
         "storagePropertyGroup": "Property Group",
         "storageProperty": "Property",
+        "storageRecordGroup": "Record Group",
+        "storageRecordTemplate": "Record Template",
+        "storageRecordField": "Record Field",
+        "storageRecord": "Record",
+        "storageRecordValue": "Record Value",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
