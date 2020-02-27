@@ -6,7 +6,7 @@ Part of [Aglomer](https://github.com/users/kanataidarov/projects/1) project.
 
 The application has following features:
 
-- It uses [Zuul]() to access backend microservices.
+- It uses [Zuul](https://github.com/Netflix/zuul) to access backend microservices.
 - It has ReactTS frontend that implements all CRUD logic for [Storage microservice](https://gitlab.com/aglomer/storage/).
 - The application is configured for Service Discovery and Configuration with the JHipster-Registry. On launch, it will refuse to start if it is not able to connect to the JHipster-Registry at [http://localhost:8761](http://localhost:8761). For more information on the JHipster Registry, read documentation on [https://www.jhipster.tech/jhipster-registry/](https://www.jhipster.tech/jhipster-registry/).
 
