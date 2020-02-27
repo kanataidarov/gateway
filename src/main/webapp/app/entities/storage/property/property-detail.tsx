@@ -48,11 +48,9 @@ export const PropertyDetail = (props: IPropertyDetailProps) => {
             <TextFormat value={propertyEntity.updated} type="date" format={APP_DATE_FORMAT} />
           </dd>
           <dt>
-            <span id="group">
-              <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
-            </span>
+            <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
           </dt>
-          <dd>{propertyEntity.group}</dd>
+          <dd>{propertyEntity.groupId ? propertyEntity.groupId : ''}</dd>
         </dl>
         <Button tag={Link} to="/property" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

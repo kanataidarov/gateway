@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import {
+  ICrudSearchAction,
+  parseHeaderForLinks,
+  loadMoreDataWhenScrolled,
+  ICrudGetAction,
+  ICrudGetAllAction,
+  ICrudPutAction,
+  ICrudDeleteAction
+} from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -20,7 +28,9 @@ const initialState = {
   errorMessage: null,
   entities: [] as ReadonlyArray<IPropertyGroup>,
   entity: defaultValue,
+  links: { next: 0 },
   updating: false,
+  totalItems: 0,
   updateSuccess: false
 };
 
@@ -62,12 +72,17 @@ export default (state: PropertyGroupState = initialState, action): PropertyGroup
         errorMessage: action.payload
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PROPERTYGROUPS):
-    case SUCCESS(ACTION_TYPES.FETCH_PROPERTYGROUP_LIST):
+    case SUCCESS(ACTION_TYPES.FETCH_PROPERTYGROUP_LIST): {
+      const links = parseHeaderForLinks(action.payload.headers.link);
+
       return {
         ...state,
         loading: false,
-        entities: action.payload.data
+        links,
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
+    }
     case SUCCESS(ACTION_TYPES.FETCH_PROPERTYGROUP):
       return {
         ...state,
@@ -105,13 +120,16 @@ const apiSearchUrl = 'services/storage/api/_search/property-groups';
 
 export const getSearchEntities: ICrudSearchAction<IPropertyGroup> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_PROPERTYGROUPS,
-  payload: axios.get<IPropertyGroup>(`${apiSearchUrl}?query=${query}`)
+  payload: axios.get<IPropertyGroup>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
 });
 
-export const getEntities: ICrudGetAllAction<IPropertyGroup> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_PROPERTYGROUP_LIST,
-  payload: axios.get<IPropertyGroup>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getEntities: ICrudGetAllAction<IPropertyGroup> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROPERTYGROUP_LIST,
+    payload: axios.get<IPropertyGroup>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
 
 export const getEntity: ICrudGetAction<IPropertyGroup> = id => {
   const requestUrl = `${apiUrl}/${id}`;
@@ -126,7 +144,6 @@ export const createEntity: ICrudPutAction<IPropertyGroup> = entity => async disp
     type: ACTION_TYPES.CREATE_PROPERTYGROUP,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
   return result;
 };
 
@@ -135,7 +152,6 @@ export const updateEntity: ICrudPutAction<IPropertyGroup> = entity => async disp
     type: ACTION_TYPES.UPDATE_PROPERTYGROUP,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
   return result;
 };
 
@@ -145,7 +161,6 @@ export const deleteEntity: ICrudDeleteAction<IPropertyGroup> = id => async dispa
     type: ACTION_TYPES.DELETE_PROPERTYGROUP,
     payload: axios.delete(requestUrl)
   });
-  dispatch(getEntities());
   return result;
 };
 

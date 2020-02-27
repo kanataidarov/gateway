@@ -3,36 +3,89 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudSearchAction, ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import {
+  Translate,
+  translate,
+  ICrudSearchAction,
+  ICrudGetAllAction,
+  TextFormat,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getSearchEntities, getEntities } from './property.reducer';
 import { IProperty } from 'app/shared/model/storage/property.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPropertyProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Property = (props: IPropertyProps) => {
   const [search, setSearch] = useState('');
+  const [paginationState, setPaginationState] = useState(getSortState(props.location, ITEMS_PER_PAGE));
 
-  useEffect(() => {
-    props.getEntities();
-  }, [search]);
+  const getAllEntities = () => {
+    if (search) {
+      props.getSearchEntities(
+        search,
+        paginationState.activePage - 1,
+        paginationState.itemsPerPage,
+        `${paginationState.sort},${paginationState.order}`
+      );
+    } else {
+      props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+    }
+  };
 
   const startSearching = () => {
     if (search) {
-      props.getSearchEntities(search);
+      setPaginationState({
+        ...paginationState,
+        activePage: 1
+      });
     }
   };
 
   const clear = () => {
     setSearch('');
+    setPaginationState({
+      ...paginationState,
+      activePage: 1
+    });
   };
 
   const handleSearch = event => setSearch(event.target.value);
 
-  const { propertyList, match, loading } = props;
+  const sortEntities = () => {
+    getAllEntities();
+    props.history.push(
+      `${props.location.pathname}?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`
+    );
+  };
+
+  useEffect(() => {
+    sortEntities();
+  }, [paginationState.activePage, paginationState.order, paginationState.sort, search]);
+
+  const sort = p => () => {
+    setPaginationState({
+      ...paginationState,
+      order: paginationState.order === 'asc' ? 'desc' : 'asc',
+      sort: p
+    });
+  };
+
+  const handlePagination = currentPage =>
+    setPaginationState({
+      ...paginationState,
+      activePage: currentPage
+    });
+
+  const { propertyList, match, loading, totalItems } = props;
   return (
     <div>
       <h2 id="property-heading">
@@ -71,20 +124,20 @@ export const Property = (props: IPropertyProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th>
-                  <Translate contentKey="global.field.id">ID</Translate>
+                <th className="hand" onClick={sort('id')}>
+                  <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('name')}>
+                  <Translate contentKey="gatewayApp.storageProperty.name">Name</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('created')}>
+                  <Translate contentKey="gatewayApp.storageProperty.created">Created</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('updated')}>
+                  <Translate contentKey="gatewayApp.storageProperty.updated">Updated</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="gatewayApp.storageProperty.name">Name</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="gatewayApp.storageProperty.created">Created</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="gatewayApp.storageProperty.updated">Updated</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
+                  <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -104,7 +157,7 @@ export const Property = (props: IPropertyProps) => {
                   <td>
                     <TextFormat type="date" value={property.updated} format={APP_DATE_FORMAT} />
                   </td>
-                  <td>{property.group}</td>
+                  <td>{property.groupId ? <Link to={`property-group/${property.groupId}`}>{property.groupId}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${property.id}`} color="info" size="sm">
@@ -113,13 +166,23 @@ export const Property = (props: IPropertyProps) => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${property.id}/edit`} color="primary" size="sm">
+                      <Button
+                        tag={Link}
+                        to={`${match.url}/${property.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        color="primary"
+                        size="sm"
+                      >
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${property.id}/delete`} color="danger" size="sm">
+                      <Button
+                        tag={Link}
+                        to={`${match.url}/${property.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        color="danger"
+                        size="sm"
+                      >
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -139,13 +202,28 @@ export const Property = (props: IPropertyProps) => {
           )
         )}
       </div>
+      <div className={propertyList && propertyList.length > 0 ? '' : 'd-none'}>
+        <Row className="justify-content-center">
+          <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
+        </Row>
+        <Row className="justify-content-center">
+          <JhiPagination
+            activePage={paginationState.activePage}
+            onSelect={handlePagination}
+            maxButtons={5}
+            itemsPerPage={paginationState.itemsPerPage}
+            totalItems={props.totalItems}
+          />
+        </Row>
+      </div>
     </div>
   );
 };
 
 const mapStateToProps = ({ property }: IRootState) => ({
   propertyList: property.entities,
-  loading: property.loading
+  loading: property.loading,
+  totalItems: property.totalItems
 });
 
 const mapDispatchToProps = {

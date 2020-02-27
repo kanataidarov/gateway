@@ -22,6 +22,7 @@ const initialState = {
   entities: [] as ReadonlyArray<IProperty>,
   entity: defaultValue,
   updating: false,
+  totalItems: 0,
   updateSuccess: false
 };
 
@@ -67,7 +68,8 @@ export default (state: PropertyState = initialState, action): PropertyState => {
       return {
         ...state,
         loading: false,
-        entities: action.payload.data
+        entities: action.payload.data,
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PROPERTY):
       return {
@@ -106,13 +108,16 @@ const apiSearchUrl = 'services/storage/api/_search/properties';
 
 export const getSearchEntities: ICrudSearchAction<IProperty> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_PROPERTIES,
-  payload: axios.get<IProperty>(`${apiSearchUrl}?query=${query}`)
+  payload: axios.get<IProperty>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
 });
 
-export const getEntities: ICrudGetAllAction<IProperty> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_PROPERTY_LIST,
-  payload: axios.get<IProperty>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getEntities: ICrudGetAllAction<IProperty> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROPERTY_LIST,
+    payload: axios.get<IProperty>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
 
 export const getEntity: ICrudGetAction<IProperty> = id => {
   const requestUrl = `${apiUrl}/${id}`;

@@ -7,6 +7,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPropertyGroup } from 'app/shared/model/storage/property-group.model';
+import { getEntities as getPropertyGroups } from 'app/entities/storage/property-group/property-group.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './property.reducer';
 import { IProperty } from 'app/shared/model/storage/property.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -15,12 +17,13 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPropertyUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const PropertyUpdate = (props: IPropertyUpdateProps) => {
+  const [groupId, setGroupId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { propertyEntity, loading, updating } = props;
+  const { propertyEntity, propertyGroups, loading, updating } = props;
 
   const handleClose = () => {
-    props.history.push('/property');
+    props.history.push('/property' + props.location.search);
   };
 
   useEffect(() => {
@@ -29,6 +32,8 @@ export const PropertyUpdate = (props: IPropertyUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
+
+    props.getPropertyGroups();
   }, []);
 
   useEffect(() => {
@@ -125,10 +130,19 @@ export const PropertyUpdate = (props: IPropertyUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
-                <Label id="groupLabel" for="property-group">
+                <Label for="property-group">
                   <Translate contentKey="gatewayApp.storageProperty.group">Group</Translate>
                 </Label>
-                <AvField id="property-group" type="string" className="form-control" name="group" />
+                <AvInput id="property-group" type="select" className="form-control" name="groupId">
+                  <option value="" key="0" />
+                  {propertyGroups
+                    ? propertyGroups.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/property" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -152,6 +166,7 @@ export const PropertyUpdate = (props: IPropertyUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  propertyGroups: storeState.propertyGroup.entities,
   propertyEntity: storeState.property.entity,
   loading: storeState.property.loading,
   updating: storeState.property.updating,
@@ -159,6 +174,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPropertyGroups,
   getEntity,
   updateEntity,
   createEntity,
